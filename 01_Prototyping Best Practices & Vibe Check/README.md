@@ -7,9 +7,8 @@
 
 ### [Quicklinks](https://github.com/AI-Maker-Space/AIE8/tree/main/00_AIM_Quicklinks)
 
-| 📰 Session Sheet | ⏺️ Recording     | 🖼️ Slides        | 👨‍💻 Repo         | 📝 Homework      | 📁 Feedback       |
-|:-----------------|:-----------------|:-----------------|:-----------------|:-----------------|:-----------------|
-| [Session 1: Introduction and Vibe Check](https://www.notion.so/Session-1-Introduction-and-Vibe-Check-263cd547af3d81869041ccc46523f1ec) |[Recording!](https://us02web.zoom.us/rec/share/AZEoQtJn03hZUBXoaAUT9I1Nx7sSdsjZ4n5ll8TTfCGQsVrBi709FLQLXwwdCCxD.2YqwpkoZhDDnHVKK) (Y&W@%PS3) | [Session 1 Slides](https://www.canva.com/design/DAGya0dMFhM/I4kYi9Y-Ec_jMtoq0aq4-g/edit?utm_content=DAGya0dMFhM&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton) | You are here! | [Session 1 Assignment: Vibe Check](https://forms.gle/jNhHxcmCoMJiqpUL6) | [AIE8 Feedback 9/9](https://forms.gle/GgFqgEkYPQ5a3yHj7)
+| 🤓 Pre-work | 📰 Session Sheet | ⏺️ Recording     | 🖼️ Slides        | 👨‍💻 Repo         | 📝 Homework      | 📁 Feedback       |
+|:-----------------|:-----------------|:-----------------|:-----------------|:-----------------|:-----------------|:-----------------|
 
 ## 🏗️ How AIM Does Assignments
 
@@ -37,15 +36,114 @@ You will be required to submit a link to your GitHub, as well as screenshots of 
 Please evaluate your system on the following questions:
 
 1. Explain the concept of object-oriented programming in simple terms to a complete beginner. 
-    - Aspect Tested:
+    - Aspect Tested: 
+      * Responsiveness to the input promt; 
+        > the response was quite fast for the simple given prompt
+      * Text formatting of the respose in the chat screen;
+        > the first version of the chat frontent was rendering raw text with no formatting which made it difficult to read. After vibing a bit more on the UI I got the chat to format text response as Markdown.
+      * verbosity and tone of the response, meaning if the response is in simple terms and not too long; 
+        > the response sound pretty good to both aspects highlighted in the prompt: simplicity and not too verbose.
+
+    - LLM response to the prompt:
+
+---
+Sure! Imagine you want to organize your toys. Instead of just having a big box with everything mixed up, you put similar toys into separate boxes—like one box for cars, another box for dolls, and another for blocks.
+
+**Object-oriented programming (OOP)** works kind of like that. It’s a way to write computer programs by organizing code into “objects,” which are like those toy boxes.
+
+Here’s how it breaks down:
+
+ 1. **Objects**: These are things that have two main parts:
+  * Data: Information about the object (like the color or size of a toy car).
+  * Actions: Things the object can do (like a toy car can roll or beep).
+ 2. **Classes**: Think of this as a blueprint or a recipe. It tells the computer what kind of data and actions an object should have. For example, a “Car” class might say every car has a color and can start or stop.
+
+ 3. When you create an object from a class, it’s called an instance. So, you might have one object that’s a red car and another that’s a blue car.
+
+**Why is this useful?**
+
+ * It makes programs easier to understand because related data and actions are grouped together.
+ * You can reuse the same “blueprint” to make many objects without writing the same code over and over.
+ * It helps to model real-world things inside the computer.
+
+**In short:** Object-oriented programming helps you build programs by creating little “things” (objects) that know stuff and can do stuff, making your code organized and easier to manage.
+
+If you want, I can give a very simple example!
+
+---
+
+ - System prompt
+
+```
+You are a helpful AI assistant that knows how to explain complex subjects related to technology and computer science with a clean simple language that can be understood by any one.
+```
+
 2. Read the following paragraph and provide a concise summary of the key points…
     - Aspect Tested:
+      * How concise the summary was.
+        - the summary to the paragraf was pretty good.
+      * ability to create a conversation (thread)
+        - intially I noticed the backend was not able to create a conversation. After the first interaction with the LLM the chatbot was not able to hold the context from the rpevious interactions. So I decided to vibe code a change in the backend API to implement a "conversational history" and use it with the chat completions API.
+    - LLM response to the prompt:
+> Sure! Please provide the paragraph you’d like summarized.
+
+    - User input (from a random wikipedia article)
+> "Charles James Kirk (October 14, 1993 – September 10, 2025) was an American right-wing political activist, author, and media personality. He co-founded the conservative organization Turning Point USA (TPUSA) in 2012 and was its executive director. He was the chief executive officer (CEO) of Turning Point Action and a member of the Council for National Policy. The Washington Post described him as "one of the most prominent voices on the right" in his later years.[3]"
+
+    - LLM response to the prompt:
+> Charles James Kirk (1993–2025) was an American right-wing political activist, author, and media personality. He co-founded and led the conservative organization Turning Point USA, served as CEO of Turning Point Action, and was a member of the Council for National Policy. He was recognized as a prominent conservative figure.
+
 3. Write a short, imaginative story (100–150 words) about a robot finding friendship in an unexpected place.
     - Aspect Tested:
+      * the size of the generated story (word count)
+        > 128 words
+      * the sense of the story.
+        > good sense
+
+    - LLM response to the prompt:
+> In a forgotten scrapyard, R1-7 whirred to life after years of silence. Rust clung to his metal frame, but his sensors flickered with curiosity. He wandered among the heaps of discarded machines, longing for connection. One day, he found a tiny, injured bird shivering beneath a broken radio.
+> 
+> R1-7 gently scooped the bird into his palm, warming it with his internal heater. Days passed, and the bird healed, chirping melodies that echoed softly in the quiet yard. Though R1-7 could not sing, he listened intently, storing the tunes in his memory banks.
+>
+> Together, they created a new harmony—mechanical whirs blending with cheerful bird songs. In the heart of forgotten ruins, a robot and a bird discovered friendship, proving that even in the most unlikely places, connection could blossom.
+
+
 4. If a store sells apples in packs of 4 and oranges in packs of 3, how many packs of each do I need to buy to get exactly 12 apples and 9 oranges?
     - Aspect Tested:
+      * The response text formating
+        > althoug it is rendering the response in Markdown, the Math expressions is not well rendered.
+      * solution explanation
+        > good and clear explanation
+      * solution accuracy
+        >  pretty accurate for the given prompt.
+    - LLM response to the prompt:
+---
+You want to buy exactly 12 apples and 9 oranges.
+
+ * Apples come in packs of 4.
+ * Oranges come in packs of 3.
+Let:
+
+ * ( x ) = number of apple packs
+ * ( y ) = number of orange packs
+We have the equations: [ 4x = 12 ] [ 3y = 9 ]
+
+Solve for ( x ) and ( y ): [ x = \frac{12}{4} = 3 ] [ y = \frac{9}{3} = 3 ]
+
+**Answer:** You need to buy 3 packs of apples and 3 packs of oranges.
+---
+
 5. Rewrite the following paragraph in a professional, formal tone…
     - Aspect Tested:
+      * tone of the generated response compared to the original given to the LLM
+       > sounds a bit more sofisticated
+
+    - Sample paragraph:
+> "Vibe checking" is an informal term for cursory unstructured and non-comprehensive evaluation of LLM-powered systems. The idea is to loosely evaluate our system to cover significant and crucial functions where failure would be immediately noticeable and severe. In essence, it's a first look to ensure your system isn't experiencing catastrophic failure."
+
+    - LLM response to the prompt:
+> The term "vibe checking" refers informally to a preliminary, unstructured, and non-comprehensive evaluation of systems powered by large language models (LLMs). This approach aims to conduct a broad assessment of key and critical functionalities where failures would be immediately apparent and have significant consequences. Essentially, it serves as an initial review to confirm that the system is not experiencing any catastrophic failures.
+
 
 This "vibe check" now serves as a baseline, of sorts, to help understand what holes your application has.
 
@@ -59,6 +157,7 @@ This "vibe check" now serves as a baseline, of sorts, to help understand what ho
 
 What are some limitations of vibe checking as an evaluation tool?
 ##### ✅ Answer:
+> rely a 100% on human interactions and lack automation which make it hard to implement at scale.
 
 ### 🚧 Advanced Build (OPTIONAL):
 

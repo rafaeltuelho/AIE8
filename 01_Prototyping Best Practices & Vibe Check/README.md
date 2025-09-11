@@ -167,14 +167,15 @@ Please make adjustments to your application that you believe will improve the vi
 
 #### 🏗️ Activity #1
 ##### Adjustments Made:
-- _describe adjustment(s) here_
+- _Fixed response rendering when contains Math expressions_
+- _Improved the UI overall for a better UX_
+- _Added the ability to let users select different OpenAI Models_
+_ _Improved chat conversation history management on the server-side_
 
 ##### Results:
-1. _Comment here how the change(s) impacted the vibe check of your system_
-2. 
-3. 
-4. 
-5.
+1. _After a couple rounds of vibe checking and coding I noticed an overall improvement in the app UX and UI._
+2. _Now users can choose different Models from OpenAI and test their prompt against them._
+3. _I cought an significan flaw in the backend code related to how the conversation history was first implemented. Then I vibe coded important security changes in the backend API to fix the swecurity issues._
 
 
 ## Submitting Your Homework

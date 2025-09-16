@@ -25,8 +25,20 @@
 ### Steps to Run:
 
 1. Install UV - which you can do through [this resource](https://docs.astral.sh/uv/#getting-started)
+
+[!IMPORTANT]
+🚨🚨🚨
+If using **VSCode** or **Cursor** editor, make sure you create **and activate** a Python virtual env inside the project's root dir your are working with. For instance if working with the project `02_Embeddings_and_RAG`. perform these two steps before you open your Code editor.
+
+```bash
+uv venv
+source .venv/bin/activate
+```
+**This will ensure the right Jupyter inherits the same system PATH env var!!!** 
+
 2. Run the command `uv sync`
-3. Open your Jupyter notebook and select `.venv` for your kernel. 
+3. Open your your VSCode (or Cursor) **from the same shell terminal** where you created and activated the venv.
+4. Open the Jupyter notebook and select `.venv` for your kernel. 
 
 # Build 🏗️
 

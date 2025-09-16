@@ -2,7 +2,7 @@ import os
 from typing import List
 
 
-class TextFileLoader:
+class TextFileUtils:
     def __init__(self, path: str, encoding: str = "utf-8"):
         self.documents = []
         self.path = path
@@ -35,6 +35,12 @@ class TextFileLoader:
         self.load()
         return self.documents
 
+    def save_file(self, text: str, file_name: str):
+        path = os.path.join(self.path, file_name)
+        # Create directory if it doesn't exist
+        os.makedirs(os.path.dirname(self.path), exist_ok=True)
+        with open(path, "w", encoding=self.encoding) as f:
+            f.write(text)
 
 class CharacterTextSplitter:
     def __init__(
@@ -63,7 +69,7 @@ class CharacterTextSplitter:
 
 
 if __name__ == "__main__":
-    loader = TextFileLoader("data/KingLear.txt")
+    loader = TextFileUtils("data/KingLear.txt")
     loader.load()
     splitter = CharacterTextSplitter()
     chunks = splitter.split_texts(loader.documents)

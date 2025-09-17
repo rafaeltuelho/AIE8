@@ -6,6 +6,7 @@ from typing import List, Dict, Tuple, Optional
 from dataclasses import dataclass
 import asyncio
 from urllib.parse import urlparse, parse_qs
+import numpy as np
 
 # constants
 TEMP_AUDIO_DIR = "data/temp_audio"
@@ -374,71 +375,19 @@ class YouTubeProcessor:
             List of VideoSegment objects ready for vector database ingestion
         """
         return self.create_video_segments(url, chunk_duration)
-
-
-class YouTubeVectorDatabase:
-    """Extended vector database for YouTube content with metadata support."""
     
-    def __init__(self, embedding_model=None):
-        from aimakerspace.vectordatabase import VectorDatabase
-        self.vector_db = VectorDatabase(embedding_model)
-        self.metadata = {}  # Store metadata for each segment
-    
-    def insert_segment(self, segment: VideoSegment, embedding: List[float]):
-        """Insert a video segment with its embedding and metadata."""
-        logger.debug(f"Inserting segment: {segment.segment_id}")
-        self.vector_db.insert(segment.segment_id, embedding)
-        self.metadata[segment.segment_id] = {
-            'start_time': segment.start_time,
-            'end_time': segment.end_time,
-            'text': segment.text,
-            'video_id': segment.video_id,
-            'video_title': segment.video_title,
-            'video_url': segment.video_url,
-            'segment_id': segment.segment_id
-        }
-    
-    def search_with_metadata(
-        self, 
-        query_text: str, 
-        k: int = 5
-    ) -> List[Dict]:
-        """
-        Search for relevant segments and return with full metadata.
-        
-        Returns:
-            List of dictionaries containing:
-            - text: The transcript segment
-            - start_time: Start timestamp in video
-            - end_time: End timestamp in video
-            - video_title: Title of the video
-            - video_url: Original YouTube URL
-            - similarity_score: How relevant this segment is
-        """
-        # Get search results from vector database
-        results = self.vector_db.search_by_text(query_text, k)
-        
-        # Enrich with metadata
-        enriched_results = []
-        for segment_id, similarity_score in results:
-            if segment_id in self.metadata:
-                metadata = self.metadata[segment_id].copy()
-                metadata['similarity_score'] = similarity_score
-                enriched_results.append(metadata)
-        
-        return enriched_results
-    
-    def get_video_segments(self, video_id: str) -> List[Dict]:
-        """Get all segments for a specific video."""
+    def get_video_segments(self, video_id: str, vector_db) -> List[Dict]:
+        """Get all segments for a specific video from the vector database."""
         segments = []
-        for segment_id, metadata in self.metadata.items():
-            if metadata['video_id'] == video_id:
+        for key, metadata in vector_db.metadata.items():
+            if metadata.get('video_id') == video_id:
                 segments.append(metadata)
         
-        return sorted(segments, key=lambda x: x['start_time'])
+        return sorted(segments, key=lambda x: x.get('start_time', 0))
     
     async def ingest_youtube_video(
         self, 
+        vector_db,
         url: str, 
         chunk_duration: float = 40.0
     ) -> Dict:
@@ -446,6 +395,7 @@ class YouTubeVectorDatabase:
         Complete pipeline to ingest a YouTube video into the vector database.
         
         Args:
+            vector_db: VectorDatabase instance to ingest into
             url: YouTube video URL
             chunk_duration: Duration of each segment in seconds
         
@@ -456,19 +406,27 @@ class YouTubeVectorDatabase:
         logger.info(f"Using chunk duration: {chunk_duration} seconds")
         
         # Process video
-        processor = YouTubeProcessor()
-        segments = processor.process_youtube_video(url, chunk_duration)
+        segments = self.process_youtube_video(url, chunk_duration)
         
         # Generate embeddings for all segments
         texts = [segment.text for segment in segments]
         logger.debug(f"Processing {len(texts)} text segments for embedding generation")
-        embeddings = await self.vector_db.embedding_model.async_get_embeddings(texts)
+        embeddings = await vector_db.embedding_model.async_get_embeddings(texts)
         logger.debug(f"Generated {len(embeddings)} embeddings successfully")
         
-        # Insert into vector database
+        # Insert into vector database with metadata
         logger.info("Inserting segments and embeddings into vector database...")
         for i, (segment, embedding) in enumerate(zip(segments, embeddings), 1):
-            self.insert_segment(segment, embedding)
+            metadata = {
+                'start_time': segment.start_time,
+                'end_time': segment.end_time,
+                'text': segment.text,
+                'video_id': segment.video_id,
+                'video_title': segment.video_title,
+                'video_url': segment.video_url,
+                'segment_id': segment.segment_id
+            }
+            vector_db.insert(segment.segment_id, np.array(embedding), metadata)
             if i % 10 == 0 or i == len(segments):  # Log progress every 10 segments
                 logger.debug(f"Inserted {i}/{len(segments)} segments into vector database")
         
@@ -487,22 +445,28 @@ class YouTubeVectorDatabase:
         return result
 
 
+
+
 # Example usage function
 async def ingest_youtube_video_example(url: str):
     """Example of how to ingest a YouTube video."""
     logger.info("Starting YouTube video ingestion example")
     # Create vector database
-    logger.info("Creating YouTubeVectorDatabase instance...")
-    youtube_db = YouTubeVectorDatabase()
+    from aimakerspace.vectordatabase import VectorDatabase
+    logger.info("Creating VectorDatabase instance...")
+    vector_db = VectorDatabase()
+    
+    # Create YouTube processor
+    processor = YouTubeProcessor()
     
     # Ingest video
     logger.info("Starting video ingestion...")
-    result = await youtube_db.ingest_youtube_video(url)
+    result = await processor.ingest_youtube_video(vector_db, url)
     logger.info(f"Ingested {result['segments_ingested']} segments from: {result['video_title']}")
     print(f"Ingested {result['segments_ingested']} segments from: {result['video_title']}")
     
     # Example search
-    search_results = youtube_db.search_with_metadata("machine learning", k=3)
+    search_results = vector_db.search_with_metadata("machine learning", k=3)
     
     for result in search_results:
         print(f"\nFound at {result['start_time']:.1f}s - {result['end_time']:.1f}s:")
@@ -510,7 +474,7 @@ async def ingest_youtube_video_example(url: str):
         print(f"Video: {result['video_title']}")
         print(f"Similarity: {result['similarity_score']:.3f}")
     
-    return youtube_db
+    return vector_db
 
 
 if __name__ == "__main__":

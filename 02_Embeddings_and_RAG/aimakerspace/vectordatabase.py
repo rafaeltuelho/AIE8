@@ -82,10 +82,13 @@ class VectorDatabase:
     def __init__(self, embedding_model: EmbeddingModel = None):
         self.vectors = defaultdict(np.array)
         self.embedding_model = embedding_model or EmbeddingModel()
+        self.metadata = {}  # Store metadata for each vector
 
-    def insert(self, key: str, vector: np.array) -> None:
-        """Insert a vector into the database with the given key."""
+    def insert(self, key: str, vector: np.array, metadata: dict = None) -> None:
+        """Insert a vector into the database with the given key and optional metadata."""
         self.vectors[key] = vector
+        if metadata is not None:
+            self.metadata[key] = metadata
 
     def _get_distance_function(self, distance_measure: Union[str, DistanceMeasure, Callable]) -> Callable:
         """Get the distance function from various input types.
@@ -178,6 +181,56 @@ class VectorDatabase:
     def get_available_distance_measures(self) -> List[str]:
         """Get a list of available distance measure names."""
         return [measure.value for measure in DistanceMeasure]
+    
+    def search_with_metadata(
+        self, 
+        query_text: str, 
+        k: int = 5,
+        distance_measure: Union[str, DistanceMeasure, Callable] = DistanceMeasure.COSINE
+    ) -> List[dict]:
+        """
+        Search for relevant vectors and return with full metadata.
+        
+        Args:
+            query_text: Text to convert to embedding and search with
+            k: Number of similar vectors to return
+            distance_measure: Distance measure to use
+            
+        Returns:
+            List of dictionaries containing metadata and similarity scores
+        """
+        # Get search results from vector database
+        results = self.search_by_text(query_text, k, distance_measure)
+        
+        # Enrich with metadata
+        enriched_results = []
+        for key, similarity_score in results:
+            metadata = self.metadata.get(key, {}).copy()
+            metadata['similarity_score'] = similarity_score
+            metadata['key'] = key
+            enriched_results.append(metadata)
+        
+        return enriched_results
+    
+    def get_metadata(self, key: str) -> dict:
+        """Get metadata for a specific vector key."""
+        return self.metadata.get(key, {})
+    
+    def get_vectors_by_metadata_filter(self, filter_func: callable) -> List[dict]:
+        """
+        Get all vectors that match a metadata filter function.
+        
+        Args:
+            filter_func: Function that takes metadata dict and returns bool
+            
+        Returns:
+            List of metadata dictionaries for matching vectors
+        """
+        matching_vectors = []
+        for key, metadata in self.metadata.items():
+            if filter_func(metadata):
+                matching_vectors.append(metadata)
+        return matching_vectors
 
 
 if __name__ == "__main__":

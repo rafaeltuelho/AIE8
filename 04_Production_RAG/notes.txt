@@ -1,0 +1,31 @@
+
+
+LangChain.
+Chain: a sequence of calls to other components
+
+LCEL: Expression Laguage used to compose Chains
+
+A simple "LLM prompt" chain in LCEL
+chain = chat_prompt | openai_chat_model
+
+Every component (like prompt, models, retrievers, or parsers) of a chain is a runnable.
+We often refer to a Runnable created using LCEL as a "chain". 
+It's important to remember that a "chain" is Runnable and it implements the full Runnable Interface.
+
+Every Runnable in LangChain follows the same pattern:
+
+- Takes an input
+- Performs some operation
+- Returns an output
+
+Think of Runnables as the building blocks of your LLM application. 
+
+LangGraph.
+LangGraph lets us add cycles (a more robust and customizable loop) to applications built on LangChain.
+Cycles allows us to recreate application flowcharts in code in an almost 1-to-1 fashion.
+
+Graphs.
+Graphs are collections of connected objects: nodes and edges.
+
+- **Node**: Think `function` or `runnable`; i.e. *something that changes **state***
+- **Edge**: Think path to take; i.e., *where to pass **state** object next*

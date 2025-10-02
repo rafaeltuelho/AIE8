@@ -48,21 +48,28 @@ Make a social media post about your final application!
 Here's a template to get you started:
 
 ```
-🚀 Exciting News! 🚀
+🚀 Just built my first Multi-agent workflow! 🚀
 
-I am thrilled to announce that I have just built and shipped an Multi-Agent Application with LangGraph! 🎉🤖
+This time, I dive a little deeper into the #LangGraph, implementing a Multi-agent workflow, implementing patterns like:
+ * (Team) Supervisor Agent orchestrates specialized agents (workers)
+ * Team of workers (agents with specific tools)
+ * Sub-graphs orchestrated by a (Meta) Supervisor Agent
+
+ Once again, #LangSmith was fundamental to observing Graph execution, helping understand the Agent's behaviour and outputs.
 
 🔍 Three Key Takeaways:
-1️⃣ 
-2️⃣ 
-3️⃣ 
+1️⃣ How to use multiple agents (acting as specialized workers) collaborating to accomplish a given Task. 
+2️⃣ How to implement the Supervisor pattern to hand over tasks between multiple agents
+3️⃣ How to define specialized agents with access to the right tools to perform their job. 
 
-Let's continue pushing the boundaries of what's possible in the world of AI and question-answering. Here's to many more innovations! 🚀
-Shout out to @AIMakerspace !
+Shout out to AI Makerspace !
 
 #LangChain #QuestionAnswering #RetrievalAugmented #Innovation #AI #TechMilestone
 
-Feel free to reach out if you're curious or would like to collaborate on similar projects! 🤝🔥
+Feel free to check it out by:
+ * looking at the source code: https://github.com/rafaeltuelho/AIE8/blob/s06-assignment/06_Multi_Agent_with_LangGraph/Multi_Agent_RAG_LangGraph.ipynb
+ * trying out the Notebook in Google Colab: https://colab.research.google.com/github/rafaeltuelho/AIE8/blob/s06-assignment/06_Multi_Agent_with_LangGraph/Multi_Agent_RAG_LangGraph.ipynb
+ * watching a quick demo: https://www.loom.com/share/26c6687b5bd541968d44e7a6197fdc2b?sid=b1f7eded-7ab7-40ed-adc7-eebfb4c95abe
 ```
 
 ## Submitting Your Homework

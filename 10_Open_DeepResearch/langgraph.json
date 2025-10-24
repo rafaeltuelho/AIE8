@@ -1,0 +1,18 @@
+{
+    "version": 1,
+    "dependencies": ["."],
+    "env": ".env",
+    "python_version": "3.13",
+    "graphs": {
+      "deep_researcher": "open_deep_library.deep_researcher:deep_researcher"
+    },
+    "assistants": {
+      "agent": {
+        "graph_id": "deep_researcher",
+        "name": "Deep Researcher",
+        "description": "Agent with tools using conditional tool-calling."
+      }
+    }
+  }
+  
+  
